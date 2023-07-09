@@ -1,0 +1,294 @@
+sources:
+  - name: main
+    tables:
+      - name: bike_data
+        columns:
+          - name: tripduration
+            data_type: CHARACTER VARYING(256)
+          - name: starttime
+            data_type: CHARACTER VARYING(256)
+          - name: stoptime
+            data_type: CHARACTER VARYING(256)
+          - name: start station id
+            data_type: CHARACTER VARYING(256)
+          - name: start station name
+            data_type: CHARACTER VARYING(256)
+          - name: start station latitude
+            data_type: CHARACTER VARYING(256)
+          - name: start station longitude
+            data_type: CHARACTER VARYING(256)
+          - name: end station id
+            data_type: CHARACTER VARYING(256)
+          - name: end station name
+            data_type: CHARACTER VARYING(256)
+          - name: end station latitude
+            data_type: CHARACTER VARYING(256)
+          - name: end station longitude
+            data_type: CHARACTER VARYING(256)
+          - name: bikeid
+            data_type: CHARACTER VARYING(256)
+          - name: usertype
+            data_type: CHARACTER VARYING(256)
+          - name: birth year
+            data_type: CHARACTER VARYING(256)
+          - name: gender
+            data_type: CHARACTER VARYING(256)
+          - name: ride_id
+            data_type: CHARACTER VARYING(256)
+          - name: rideable_type
+            data_type: CHARACTER VARYING(256)
+          - name: started_at
+            data_type: CHARACTER VARYING(256)
+          - name: ended_at
+            data_type: CHARACTER VARYING(256)
+          - name: start_station_name
+            data_type: CHARACTER VARYING(256)
+          - name: start_station_id
+            data_type: CHARACTER VARYING(256)
+          - name: end_station_name
+            data_type: CHARACTER VARYING(256)
+          - name: end_station_id
+            data_type: CHARACTER VARYING(256)
+          - name: start_lat
+            data_type: CHARACTER VARYING(256)
+          - name: start_lng
+            data_type: CHARACTER VARYING(256)
+          - name: end_lat
+            data_type: CHARACTER VARYING(256)
+          - name: end_lng
+            data_type: CHARACTER VARYING(256)
+          - name: member_casual
+            data_type: CHARACTER VARYING(256)
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: central_park_weather
+        columns:
+          - name: station
+            data_type: CHARACTER VARYING(256)
+          - name: name
+            data_type: CHARACTER VARYING(256)
+          - name: date
+            data_type: CHARACTER VARYING(256)
+          - name: awnd
+            data_type: CHARACTER VARYING(256)
+          - name: prcp
+            data_type: CHARACTER VARYING(256)
+          - name: snow
+            data_type: CHARACTER VARYING(256)
+          - name: snwd
+            data_type: CHARACTER VARYING(256)
+          - name: tmax
+            data_type: CHARACTER VARYING(256)
+          - name: tmin
+            data_type: CHARACTER VARYING(256)
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: daily_citi_bike_trip_counts_and_weather
+        columns:
+          - name: date
+            data_type: CHARACTER VARYING(256)
+          - name: trips
+            data_type: CHARACTER VARYING(256)
+          - name: precipitation
+            data_type: CHARACTER VARYING(256)
+          - name: snow_depth
+            data_type: CHARACTER VARYING(256)
+          - name: snowfall
+            data_type: CHARACTER VARYING(256)
+          - name: max_temperature
+            data_type: CHARACTER VARYING(256)
+          - name: min_temperature
+            data_type: CHARACTER VARYING(256)
+          - name: average_wind_speed
+            data_type: CHARACTER VARYING(256)
+          - name: dow
+            data_type: CHARACTER VARYING(256)
+          - name: year
+            data_type: CHARACTER VARYING(256)
+          - name: month
+            data_type: CHARACTER VARYING(256)
+          - name: holiday
+            data_type: CHARACTER VARYING(256)
+          - name: stations_in_service
+            data_type: CHARACTER VARYING(256)
+          - name: weekday
+            data_type: CHARACTER VARYING(256)
+          - name: weekday_non_holiday
+            data_type: CHARACTER VARYING(256)
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: fhv_bases
+        columns:
+          - name: base_number
+            data_type: CHARACTER VARYING(256)
+          - name: base_name
+            data_type: CHARACTER VARYING(256)
+          - name: dba
+            data_type: CHARACTER VARYING(256)
+          - name: dba_category
+            data_type: CHARACTER VARYING(256)
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: fhv_tripdata
+        columns:
+          - name: dispatching_base_num
+            data_type: CHARACTER VARYING(256)
+          - name: pickup_datetime
+            data_type: TIMESTAMP
+          - name: dropoff_datetime
+            data_type: TIMESTAMP
+          - name: pulocationid
+            data_type: DOUBLE
+          - name: dolocationid
+            data_type: DOUBLE
+          - name: sr_flag
+            data_type: INTEGER
+          - name: affiliated_base_number
+            data_type: CHARACTER VARYING(256)
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: fhvhv_tripdata
+        columns:
+          - name: hvfhs_license_num
+            data_type: CHARACTER VARYING(256)
+          - name: dispatching_base_num
+            data_type: CHARACTER VARYING(256)
+          - name: originating_base_num
+            data_type: CHARACTER VARYING(256)
+          - name: request_datetime
+            data_type: TIMESTAMP
+          - name: on_scene_datetime
+            data_type: TIMESTAMP
+          - name: pickup_datetime
+            data_type: TIMESTAMP
+          - name: dropoff_datetime
+            data_type: TIMESTAMP
+          - name: pulocationid
+            data_type: BIGINT
+          - name: dolocationid
+            data_type: BIGINT
+          - name: trip_miles
+            data_type: DOUBLE
+          - name: trip_time
+            data_type: BIGINT
+          - name: base_passenger_fare
+            data_type: DOUBLE
+          - name: tolls
+            data_type: DOUBLE
+          - name: bcf
+            data_type: DOUBLE
+          - name: sales_tax
+            data_type: DOUBLE
+          - name: congestion_surcharge
+            data_type: DOUBLE
+          - name: airport_fee
+            data_type: DOUBLE
+          - name: tips
+            data_type: DOUBLE
+          - name: driver_pay
+            data_type: DOUBLE
+          - name: shared_request_flag
+            data_type: CHARACTER VARYING(256)
+          - name: shared_match_flag
+            data_type: CHARACTER VARYING(256)
+          - name: access_a_ride_flag
+            data_type: CHARACTER VARYING(256)
+          - name: wav_request_flag
+            data_type: CHARACTER VARYING(256)
+          - name: wav_match_flag
+            data_type: CHARACTER VARYING(256)
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: green_tripdata
+        columns:
+          - name: vendorid
+            data_type: BIGINT
+          - name: lpep_pickup_datetime
+            data_type: TIMESTAMP
+          - name: lpep_dropoff_datetime
+            data_type: TIMESTAMP
+          - name: store_and_fwd_flag
+            data_type: CHARACTER VARYING(256)
+          - name: ratecodeid
+            data_type: DOUBLE
+          - name: pulocationid
+            data_type: BIGINT
+          - name: dolocationid
+            data_type: BIGINT
+          - name: passenger_count
+            data_type: DOUBLE
+          - name: trip_distance
+            data_type: DOUBLE
+          - name: fare_amount
+            data_type: DOUBLE
+          - name: extra
+            data_type: DOUBLE
+          - name: mta_tax
+            data_type: DOUBLE
+          - name: tip_amount
+            data_type: DOUBLE
+          - name: tolls_amount
+            data_type: DOUBLE
+          - name: ehail_fee
+            data_type: INTEGER
+          - name: improvement_surcharge
+            data_type: DOUBLE
+          - name: total_amount
+            data_type: DOUBLE
+          - name: payment_type
+            data_type: DOUBLE
+          - name: trip_type
+            data_type: DOUBLE
+          - name: congestion_surcharge
+            data_type: DOUBLE
+          - name: filename
+            data_type: CHARACTER VARYING(256)
+
+      - name: yellow_tripdata
+        columns:
+          - name: vendorid
+            data_type: BIGINT
+          - name: tpep_pickup_datetime
+            data_type: TIMESTAMP
+          - name: tpep_dropoff_datetime
+            data_type: TIMESTAMP
+          - name: passenger_count
+            data_type: DOUBLE
+          - name: trip_distance
+            data_type: DOUBLE
+          - name: ratecodeid
+            data_type: DOUBLE
+          - name: store_and_fwd_flag
+            data_type: CHARACTER VARYING(256)
+          - name: pulocationid
+            data_type: BIGINT
+          - name: dolocationid
+            data_type: BIGINT
+          - name: payment_type
+            data_type: BIGINT
+          - name: fare_amount
+            data_type: DOUBLE
+          - name: extra
+            data_type: DOUBLE
+          - name: mta_tax
+            data_type: DOUBLE
+          - name: tip_amount
+            data_type: DOUBLE
+          - name: tolls_amount
+            data_type: DOUBLE
+          - name: improvement_surcharge
+            data_type: DOUBLE
+          - name: total_amount
+            data_type: DOUBLE
+          - name: congestion_surcharge
+            data_type: DOUBLE
+          - name: airport_fee
+            data_type: DOUBLE
+          - name: filename
+            data_type: CHARACTER VARYING(256)
