@@ -7,13 +7,13 @@ with source as (
 renamed as (
 
     select
-        dispatching_base_num,
+        TRIM(UPPER(dispatching_base_num)) as dispatching_base_num,
         pickup_datetime,
         dropoff_datetime,
         pulocationid,
         dolocationid,
         --sr_flag, always null so chuck it
-        affiliated_base_number,
+        TRIM(UPPER(affiliated_base_number)) as affiliated_base_number,
         filename
 
     from source

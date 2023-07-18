@@ -8,8 +8,8 @@ renamed as (
 
     select
         hvfhs_license_num,
-        dispatching_base_num,
-        originating_base_num,
+        TRIM(UPPER(dispatching_base_num)) as dispatching_base_num,
+        TRIM(UPPER(originating_base_num)) as originating_base_num,
         request_datetime,
         on_scene_datetime,
         pickup_datetime,
