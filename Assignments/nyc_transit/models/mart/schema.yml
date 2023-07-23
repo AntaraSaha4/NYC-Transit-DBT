@@ -1,0 +1,111 @@
+models:
+  - name: mart__dim_bike_stations
+    description: "bike stations with name, latitude and longitude"
+    columns:
+      - name: station_id
+        description: "bike station id, primary key"
+        tests:
+              - unique
+
+      - name: station_name
+        description: ""
+
+      - name: station_lat
+        description: ""
+
+      - name: station_lng
+        description: ""
+
+  - name: mart__dim_locations
+    description: "taxi locations, used to join with pulocationid and dolocationid,
+      taken from dbt seed. Not tested as data is small enough to check visually, as should be the case with use of seeds"
+    columns:
+      - name: locationid
+        description: "primary key"
+
+      - name: borough
+        description: ""
+
+      - name: zone
+        description: ""
+
+      - name: service_zone
+        description: ""
+
+  - name: mart__fact_all_bike_trips
+    description: "bike trip data normalised with station data stripped out to dim"
+    columns:
+      - name: started_at_ts
+        description: ""
+
+      - name: ended_at_ts
+        description: ""
+
+      - name: duration_min
+        description: ""
+
+      - name: duration_sec
+        description: ""
+
+      - name: start_station_id
+        description: ""
+
+      - name: end_station_id
+        description: ""
+
+  - name: mart__fact_all_taxi_trips
+    description: "all taxi trip data for analysis"
+    columns:
+      - name: type
+        description: ""
+
+      - name: pickup_datetime
+        description: ""
+
+      - name: dropoff_datetime
+        description: ""
+
+      - name: duration_min
+        description: ""
+
+      - name: duration_sec
+        description: ""
+
+      - name: pulocationid
+        description: ""
+
+      - name: dolocationid
+        description: ""
+
+  - name: mart__fact_all_trips_daily
+    description: "all trips including bikes and taxis grouped by day, with averaged trip duration"
+    columns:
+      - name: type
+        description: ""
+
+      - name: date
+        description: ""
+
+      - name: trips
+        description: ""
+
+      - name: average_trip_duration_min
+        description: ""
+
+  - name: mart__fact_all_trips
+    description: "all trips including bikes and taxis with duration"
+    columns:
+      - name: type
+        description: ""
+
+      - name: started_at_ts
+        description: ""
+
+      - name: ended_at_ts
+        description: ""
+
+      - name: duration_min
+        description: ""
+
+      - name: duration_sec
+        description: ""
