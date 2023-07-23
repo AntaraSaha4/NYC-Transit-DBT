@@ -1,0 +1,613 @@
+models:
+  - name: stg__fhv_bases
+    description: "This table maps fhv_trips to base names and 'doing business as' labels, which include ride-hailing app names."
+    tests:
+      - dbt_expectations.expect_table_row_count_to_equal_other_table:
+          compare_model: source('main', 'fhv_bases')
+    columns:
+      - name: base_number
+        description: "The TLC license number of the dispatching base"
+        tests:
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "B%"
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+
+      - name: base_name
+        description: "The official name of the base entity"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+
+      - name: dba
+        description: "The 'doing business as' name of the base"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+
+      - name: dba_category
+        description: "Different 'doing business as' categories."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: VARCHAR
+
+      - name: filename
+        description: "The source file name from where the data has been uploaded."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "%.csv"
+
+  - name: stg__fhv_tripdata
+    description: "This table contains all for-hire vehicle trip records, including ride-hailing apps Uber, Lyft, Via, and Juno"
+    tests:
+      - dbt_expectations.expect_column_pair_values_A_to_be_greater_than_B:
+          column_A: dropoff_datetime
+          column_B: pickup_datetime
+    columns:
+      - name: dispatching_base_num
+        description: "The TLC Base License Number of the base that dispatched the trip."
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: true
+          - dbt_expectations.expect_column_value_lengths_to_equal:
+              value: 6
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "B%"
+          - relationships: 
+              to: ref("stg__fhv_bases")
+              field : base_number 
+              config:
+                severity: warn
+
+      - name: pickup_datetime
+        description: "The date and time of the trip pick-up"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: TIMESTAMP
+
+      - name: dropoff_datetime
+        description: "The date and time of the trip drop-off"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+                  column_type: TIMESTAMP
+
+      - name: pulocationid
+        description: "TLC Taxi Zone in which the trip began"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 265
+              config:
+                severity: warn
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: DOUBLE
+
+      - name: dolocationid
+        description: "TLC Taxi Zone in which the trip ended"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 265
+              config:
+                severity: warn
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: DOUBLE
+
+      - name: affiliated_base_number
+        description: "The TLC Base License Number of the base that affiliated the trip."
+
+      - name: filename
+        description: "The source file name from where the data has been uploaded."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "%.parquet"
+
+  - name: stg__fhvhv_tripdata
+    description: "This table describes High Volume FHV trip data. Each row represents a single trip in an FHV 
+                      dispatched by one of NYC’s licensed High Volume FHV bases."
+    columns:
+      - name: hvfhs_license_num
+        description: "The TLC license number of the HVFHS base or business
+                          As of September 2019, the HVFHS licensees are the following:
+                            • HV0002: Juno
+                            • HV0003: Uber
+                            • HV0004: Via
+                            • HV0005: Lyft"
+        tests:
+          - dbt_expectations.expect_column_distinct_values_to_be_in_set:
+              value_set: ['HV0002','HV0003','HV0004','HV0005']
+
+      - name: dispatching_base_num
+        description: "The TLC Base License Number of the base that dispatched the trip"
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: true
+          - dbt_expectations.expect_column_value_lengths_to_equal:
+              value: 6
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "B%"
+          - relationships: 
+              to: ref("stg__fhv_bases")
+              field : base_number 
+              config:
+                severity: warn
+
+      - name: originating_base_num
+        description: "base number of the base that received the original trip request"
+        tests:
+          - dbt_expectations.expect_column_values_to_have_consistent_casing:
+              display_inconsistent_columns: true
+          - dbt_expectations.expect_column_value_lengths_to_equal:
+              value: 6
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "B%"
+          - relationships: 
+              to: ref("stg__fhv_bases")
+              field : base_number 
+              config:
+                severity: warn
+
+      - name: request_datetime
+        description: "The date and time of the trip pick-up"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: TIMESTAMP
+
+      - name: on_scene_datetime
+        description: "date/time when driver arrived at the pick-up location (Accessible Vehicles-only)"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: TIMESTAMP
+
+      - name: pickup_datetime
+        description: "The date and time of the trip pick-up"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: TIMESTAMP
+
+      - name: dropoff_datetime
+        description: "The date and time of the trip drop-off"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: TIMESTAMP
+
+      - name: pulocationid
+        description: "TLC Taxi Zone in which the trip began"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 265
+              config:
+                severity: warn
+              
+      - name: dolocationid
+        description: "TLC Taxi Zone in which the trip ended"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 1
+              max_value: 265
+              config:
+                severity: warn
+
+      - name: trip_miles
+        description: "total miles for passenger trip"
+
+      - name: trip_time
+        description: "total time in seconds for passenger trip"
+
+      - name: base_passenger_fare
+        description: "base passenger fare before tolls, tips, taxes, and fees"
+
+      - name: tolls
+        description: "total amount of all tolls paid in trip"
+
+      - name: bcf
+        description: "total amount collected in trip for Black Car Fund"
+
+      - name: sales_tax
+        description: "total amount collected in trip for NYS sales tax"
+
+      - name: congestion_surcharge
+        description: "total amount collected in trip for NYS congestion surcharge"
+
+      - name: airport_fee
+        description: "$2.50 for both drop off and pick up at LaGuardia, Newark, and John F. Kennedy airports"
+
+      - name: tips
+        description: "total amount of tips received from passenger"
+
+      - name: driver_pay
+        description: "total driver pay (not including tolls or tips and net of commission, surcharges, or taxes)"
+
+      - name: shared_request_flag
+        description: "Did the passenger agree to a shared/pooled ride, regardless of whether they were matched? (Y/N)"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: BOOLEAN
+
+      - name: shared_match_flag
+        description: "Did the passenger share the vehicle with another passenger who booked separately at any point during the trip? (Y/N)"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: BOOLEAN
+
+      - name: access_a_ride_flag
+        description: "Was the trip administered on behalf of the Metropolitan Transportation Authority (MTA)?"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: BOOLEAN
+
+      - name: wav_request_flag
+        description: "Did the passenger request a wheelchair-accessible vehicle (WAV)?"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: BOOLEAN
+
+      - name: wav_match_flag
+        description: "Did the trip occur in a wheelchair-accessible vehicle (WAV)?"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: BOOLEAN
+
+      - name: filename
+        description: "The source file name from where the data has been uploaded."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "%.parquet"
+
+  - name: stg__bike_data
+    description: "The New York City Bike Share enables quick, easy, and affordable bike trips around the New York city boroughs.
+                  The tabke includes valuable information about bike trips, including the start and end time, duration, start 
+                  and end stations."
+    columns:
+      - name: started_at_ts
+        description: "The date and time when the bike trip started."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+
+      - name: ended_at_ts
+        description: "The date and time when the bike trip ended."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: timestamp
+
+      - name: tripduration
+        description: "The duration of the bike trip in seconds."
+        tests:
+          - not_null
+
+      - name: start_station_id
+        description: "A identifier for the station where the bike trip started."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: start_station_name
+        description: "The name of the station where the bike trip started."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: start_lat
+        description: "The latitude coordinate of the station where the bike trip started."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 40.4774
+              max_value: 45.01585
+              config:
+                severity: warn
+
+      - name: start_lng
+        description: "The longitude coordinate of the station where the bike trip started."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -79.76259
+              max_value: -71.18508
+              config:
+                severity: warn
+
+      - name: end_station_id
+        description: "A identifier for the station where the bike trip ended."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: end_station_name
+        description: "The name of the station where the bike trip ended."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: end_lat
+        description: "The latitude coordinate of the station where the bike trip ended."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 40.4774
+              max_value: 45.01585
+              config:
+                severity: warn
+
+      - name: end_lng
+        description: "The longitude coordinate of the station where the bike trip ended."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: -79.76259
+              max_value: -71.18508
+              config:
+                severity: warn
+
+      - name: filename
+        description: "The source file name from where the data has been uploaded."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "%.csv.gz"
+
+  - name: stg__central_park_weather
+    description: "It has summary weather data by date."
+    columns:
+      - name: station
+        description: "The station identifier where the data has been recorded"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+          - accepted_values:
+                  values: ['USW00094728']
+                  config:
+                    severity: warn
+
+      - name: name
+        description: "The station name where the data has been recorded"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: varchar
+
+      - name: date
+        description: "The date and time of the weather observation."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: date
+          - dbt_expectations.expect_column_values_to_be_increasing:
+              sort_column: date
+
+      - name: awnd
+        description: "The average wind speed recorded in that date."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+
+      - name: prcp
+        description: "The amount of precipitation (rain, snow, etc.) that occurred during the observation period, 
+                      often reported in inches."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+
+      - name: snow
+        description: "The amount of snowfall that occurred during the observation period, usually reported in inches."
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+
+      - name: snwd
+        description: "The depth or height of the snow on the ground at the time of observation. 
+                      It represents the total amount of accumulated snow that has not melted, typically reported in inches"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: double
+
+      - name: tmax
+        description: "The max air temperature measured at the observation time, usually reported in degrees Fahrenheit"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+
+      - name: tmin
+        description: "The min air temperature measured at the observation time, usually reported in degrees Fahrenheit"
+        tests:
+          - dbt_expectations.expect_column_values_to_be_of_type:
+              column_type: integer
+
+      - name: filename
+        description: "The source file name from where the data has been uploaded."
+        tests:
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+          - dbt_expectations.expect_column_values_to_match_like_pattern:
+              like_pattern: "%.csv"
+
+  - name: stg__daily_citi_bike_trip_counts_and_weather
+    description: ""
+    columns:
+      - name: date
+        description: ""
+
+      - name: trips
+        description: ""
+
+      - name: precipitation
+        description: ""
+
+      - name: snow_depth
+        description: ""
+
+      - name: snowfall
+        description: ""
+
+      - name: max_temperature
+        description: ""
+
+      - name: min_temperature
+        description: ""
+
+      - name: average_wind_speed
+        description: ""
+
+      - name: dow
+        description: ""
+
+      - name: year
+        description: ""
+
+      - name: month
+        description: ""
+
+      - name: holiday
+        description: ""
+
+      - name: stations_in_service
+        description: ""
+
+      - name: weekday
+        description: ""
+
+      - name: weekday_non_holiday
+        description: ""
+
+      - name: filename
+        description: ""
+
+  - name: stg__green_tripdata
+    description: ""
+    columns:
+      - name: vendorid
+        description: ""
+
+      - name: lpep_pickup_datetime
+        description: ""
+
+      - name: lpep_dropoff_datetime
+        description: ""
+
+      - name: store_and_fwd_flag
+        description: ""
+
+      - name: ratecodeid
+        description: ""
+
+      - name: pulocationid
+        description: ""
+
+      - name: dolocationid
+        description: ""
+
+      - name: passenger_count
+        description: ""
+
+      - name: trip_distance
+        description: ""
+
+      - name: fare_amount
+        description: ""
+
+      - name: extra
+        description: ""
+
+      - name: mta_tax
+        description: ""
+
+      - name: tip_amount
+        description: ""
+
+      - name: tolls_amount
+        description: ""
+
+      - name: ehail_fee
+        description: ""
+
+      - name: improvement_surcharge
+        description: ""
+
+      - name: total_amount
+        description: ""
+
+      - name: payment_type
+        description: ""
+
+      - name: trip_type
+        description: ""
+
+      - name: congestion_surcharge
+        description: ""
+
+      - name: filename
+        description: ""
+
+  - name: stg__yellow_tripdata
+    description: ""
+    columns:
+      - name: vendorid
+        description: ""
+
+      - name: tpep_pickup_datetime
+        description: ""
+
+      - name: tpep_dropoff_datetime
+        description: ""
+
+      - name: passenger_count
+        description: ""
+
+      - name: trip_distance
+        description: ""
+
+      - name: ratecodeid
+        description: ""
+
+      - name: store_and_fwd_flag
+        description: ""
+
+      - name: pulocationid
+        description: ""
+
+      - name: dolocationid
+        description: ""
+
+      - name: payment_type
+        description: ""
+
+      - name: fare_amount
+        description: ""
+
+      - name: extra
+        description: ""
+
+      - name: mta_tax
+        description: ""
+
+      - name: tip_amount
+        description: ""
+
+      - name: tolls_amount
+        description: ""
+
+      - name: improvement_surcharge
+        description: ""
+
+      - name: total_amount
+        description: ""
+
+      - name: congestion_surcharge
+        description: ""
+
+      - name: airport_fee
+        description: ""
+
+      - name: filename
+        description: ""
