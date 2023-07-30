@@ -1,0 +1,50 @@
+┌───────────────────────────────────────────────┬─────────────────────────┐
+│                     zone                      │ avg_time_bw_pickup_mins │
+│                    varchar                    │         double          │
+├───────────────────────────────────────────────┼─────────────────────────┤
+│ Governor's Island/Ellis Island/Liberty Island │      11580.887640449439 │
+│ Corona                                        │      0.8781849292497496 │
+│ Newark Airport                                │       54.52953367875648 │
+│ Jamaica Bay                                   │      1039.4510385756676 │
+│ Allerton/Pelham Gardens                       │      1.3397416316660302 │
+│ Alphabet City                                 │      0.8597306391806465 │
+│ Arden Heights                                 │      11.986267208690602 │
+│ Arrochar/Fort Wadsworth                       │       5.844946777498293 │
+│ Astoria                                       │      2.0548599281337494 │
+│ Astoria Park                                  │       76.83837056504599 │
+│ Auburndale                                    │       3.895538737671854 │
+│ Baisley Park                                  │       5.750489516606557 │
+│ Bath Beach                                    │      2.8231185967923618 │
+│ Battery Park                                  │      21.315310936962113 │
+│ Battery Park City                             │       4.163534940489894 │
+│ Bay Ridge                                     │      0.5973209507980346 │
+│ Bay Terrace/Fort Totten                       │       4.664250265863169 │
+│ Bayside                                       │      1.7616256788305287 │
+│ Bedford                                       │      0.3370554497471057 │
+│ Bedford Park                                  │      0.5761413207082455 │
+│      ·                                        │               ·         │
+│      ·                                        │               ·         │
+│      ·                                        │               ·         │
+│ Willets Point                                 │       47.13526223854526 │
+│ Williamsbridge/Olinville                      │      0.5764918762346387 │
+│ Williamsburg (North Side)                     │       2.403955028715324 │
+│ Williamsburg (South Side)                     │     0.40862633115984476 │
+│ Windsor Terrace                               │      12.794834948355957 │
+│ Woodhaven                                     │      0.9484651731072811 │
+│ Woodlawn/Wakefield                            │      0.9430076461023691 │
+│ Woodside                                      │       4.882871559010581 │
+│ World Trade Center                            │      0.8510154985450165 │
+│ Yorkville East                                │      3.2791036551824733 │
+│ Yorkville West                                │       2.213435945474514 │
+│ NV                                            │       1.121904173653553 │
+│ NA                                            │       21.05976824557837 │
+│ Country Club                                  │      10.173689907795797 │
+│ Hudson Sq                                     │       5.696799695375727 │
+│ Lenox Hill West                               │      1.8542022948481176 │
+│ Mount Hope                                    │      0.5332831108616312 │
+│ West Chelsea/Hudson Yards                     │      1.9845427615109315 │
+│ West Concourse                                │       3.603903979725281 │
+│ Old Astoria                                   │       5.687439015158763 │
+├───────────────────────────────────────────────┴─────────────────────────┤
+│ 262 rows (40 shown)                                           2 columns │
+└─────────────────────────────────────────────────────────────────────────┘

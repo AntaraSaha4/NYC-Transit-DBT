@@ -1,16 +1,24 @@
-/*
-SQL Query to find count of total trips, trips starting and ending in a different borough, and 
-percentage w/ different start/end by weekday.
-*/
+-- naive JOIN strategy
+with all_trips as
+(select 
+    weekday(pickup_datetime) as weekday, 
+    count(*) trips
+    from {{ ref('mart__fact_all_taxi_trips') }} t
+    group by all),
 
-SELECT 
-    WEEKDAY(M1.pickup_datetime) as Weekday,
-    count(1) as total_trips,
-    sum(CASE WHEN T1.Borough != T2.Borough THEN 1 ELSE 0 END) AS diff_total_trips,
-    (sum(CASE WHEN T1.Borough != T2.Borough THEN 1 ELSE 0 END)/sum(1))*100 AS percent_diff_start_end
-FROM {{ ref('mart__fact_all_taxi_trips') }} M1
-LEFT JOIN {{ ref('mart__dim_locations') }} T1
-ON M1.pulocationid = T1.LocationID
-LEFT JOIN {{ ref('mart__dim_locations') }} T2
-ON M1.dolocationid = T2.LocationID
-GROUP BY 1
+inter_borough as
+(select 
+    weekday(pickup_datetime) as weekday, 
+    count(*) as trips
+from {{ ref('mart__fact_all_taxi_trips') }} t
+join {{ ref('mart__dim_locations') }} pl on t.PUlocationID = pl.LocationID
+join {{ ref('mart__dim_locations') }} dl on t.DOlocationID = dl.LocationID
+where pl.borough != dl.borough
+group by all)
+
+select all_trips.weekday,
+       all_trips.trips as all_trips,
+       inter_borough.trips as inter_borough_trips,
+       inter_borough.trips / all_trips.trips as percent_inter_borough
+from all_trips
+join inter_borough on (all_trips.weekday = inter_borough.weekday);
